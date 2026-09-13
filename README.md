@@ -4,6 +4,8 @@
 **기간**: 2026.03 ~ 2026.06
 **사용 도구**: Cadence Virtuoso Schematic Editor, Yosys, Verilog HDL
 
+📄 원본 보고서: [docs/Hybrid_LDO_Capstone_Report.pdf](docs/Hybrid_LDO_Capstone_Report.pdf)
+
 ## 개요
 0.5 V 초저전압에서 0.4 V를 공급하는 **하이브리드 LDO**를 65 nm CMOS 공정 기반으로 설계
 부하 변동 구간에서는 디지털 루프가 빠르게 복구(Coarse)하고, 정상 상태에서는 아날로그 루프가 PMOS body-bias를 조절해 리플 제거(Fine)
