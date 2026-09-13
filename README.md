@@ -5,13 +5,13 @@
 **사용 도구**: Cadence Virtuoso Schematic Editor, Yosys, Verilog HDL
 
 ## 개요
-0.5 V 초저전압에서 0.4 V를 공급하는 **하이브리드 LDO**를 65 nm CMOS 공정 기반으로 설계했습니다.
-부하 변동 구간에서는 디지털 루프가 빠르게 복구(Coarse)하고, 정상 상태에서는 아날로그 루프가 PMOS body-bias를 조절해 리플을 제거(Fine)합니다.
-외부 클럭 없이 이벤트 발생 시에만 내부 오실레이터가 동작하는 Event-Driven Self-Clocked 구조입니다.
+0.5 V 초저전압에서 0.4 V를 공급하는 **하이브리드 LDO**를 65 nm CMOS 공정 기반으로 설계
+부하 변동 구간에서는 디지털 루프가 빠르게 복구(Coarse)하고, 정상 상태에서는 아날로그 루프가 PMOS body-bias를 조절해 리플 제거(Fine)
+외부 클럭 없이 이벤트 발생 시에만 내부 오실레이터가 동작하는 Event-Driven Self-Clocked 구조
 
 ## 문제 정의
-- 0.5 V에서는 아날로그 LDO가 voltage headroom을 확보하기 어렵습니다.
-- 디지털 LDO는 이산 제어 때문에 limit cycle oscillation과 정상 상태 리플이 생깁니다.
+- 0.5 V에서는 아날로그 LDO의 voltage headroom 확보가 어려움
+- 디지털 LDO는 이산 제어로 인해 limit cycle oscillation과 정상 상태 리플 발생
 - 목표:
   - 빠른 load transient 복구
   - Zero-ripple 정상 상태
@@ -19,7 +19,7 @@
 
 ## 설계 및 구현
 **전체 구조**: Window Comparator(Fast / UP / DN) → Adaptive Linear Search Controller(CTRL[15:0]) → 16-PMOS Pass Transistor Array
-여기에 Transient Enhancement Unit(TEU), Bulk-driven Error Amplifier(body-bias), Self-Clock Generator를 결합했습니다.
+여기에 Transient Enhancement Unit(TEU), Bulk-driven Error Amplifier(body-bias), Self-Clock Generator를 결합함
 
 | 블록 | 핵심 설계 |
 |---|---|
@@ -31,7 +31,7 @@
 | **Self-Clock Generator** | `EN = NAND(DN, NOT UP)`, NAND 1개 + 인버터 3단 current-starved 링 오실레이터, 약 537 MHz |
 
 **동작 모드**: Analog(창 내부) / Fast(심각한 undershoot) / UP(완만한 undershoot) / DN(overshoot).
-Digital coarse와 analog fine이 번갈아 동작하는 **Ping-Pong** 방식입니다.
+Digital coarse와 analog fine이 번갈아 동작하는 **Ping-Pong** 방식
 
 ## 결과
 | 항목 | 값 |
@@ -46,7 +46,7 @@ Digital coarse와 analog fine이 번갈아 동작하는 **Ping-Pong** 방식입�
 | Analog loop gain / Phase margin | 40.658 dB / 60.55° |
 
 ## 배운 점 / 의의
-- Digital coarse + analog body-bias fine의 역할 분담으로 limit cycle oscillation을 원천 차단하면서, 빠른 과도 응답과 zero-ripple을 동시에 달성했습니다.
+- Digital coarse + analog body-bias fine의 역할 분담으로 limit cycle oscillation을 원천 차단하면서, 빠른 과도 응답과 zero-ripple 동시 달성
 - 한계:
   - Body 제어 시 누설 전류
   - 0.5 V 초과 공급 시 source-body 순방향 바이어스 방지용 clamp 회로 필요
